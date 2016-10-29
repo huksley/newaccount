@@ -6,7 +6,7 @@
     "jquery": "2",
     "font-awesome": "4.6.3",
     "pace": "^1.0.2",
-	"requirejs": "^2.3.2",
+    "requirejs": "^2.3.2",
     "requirejs-text": "requirejs/text#^2.0.15",
     "camunda-bpm-sdk-js": "^7.5.6",
     "kendo-ui": "kendo-labs/bower-kendo-ui#~2016.3.914",
