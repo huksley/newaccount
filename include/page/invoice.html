@@ -1,0 +1,61 @@
+xxinvoice
+
+<div id="#contentx">
+</div>
+
+<button class="btn btn-primary btn-xs">Создать счет</button>
+
+<div id="form-start-invoice">
+<div class="row">
+    <div class="col-md-6">
+                
+        <form class="form-horizontal" action="#">
+            <fieldset class="content-group">
+                <legend class="text-bold">Счет</legend>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Файл счета</label>
+                    <div class="col-lg-10">
+                        <input type="file" id="invoiceFile" class="form-control">
+                    </div>
+                </div>
+
+                 <div class="form-group">
+                    <label class="control-label col-lg-2">Получатель</label>
+                    <div class="col-lg-10">
+                        <input type="text" id="invoiceCreditor" class="form-control" value="Burbanka Travel, inc.">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Сумма счета</label>
+                    <div class="col-lg-10">
+                        <input type="text" id="invoiceAmount" class="form-control" value="1560.55">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Категория</label>
+                    <div class="col-lg-10">
+                        <select id="invoiceCategory" class="form-control">
+                            <option value="travel">Поездка</option>
+                            <option value="misc">Другое</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Номер счета</label>
+                    <div class="col-lg-10">
+                        <input type="text" id="invoiceNumber" class="form-control" value="T111">
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary" id="invoiceStart">Submit <i class="icon-arrow-right14 position-right"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
