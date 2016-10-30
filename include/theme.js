@@ -1,4 +1,4 @@
-define("theme", [ "jquery", "log" ], function ($, log) {
+define("theme", [ "jquery", "log", "config" ], function ($, log, config) {
     var theme = {};
 
     // Populate header
@@ -31,11 +31,16 @@ define("theme", [ "jquery", "log" ], function ($, log) {
         } 
         if (content) {
             $("#content").html(content);
+            config.apply($("#content"));
         }
 
         if (handler) {
             window.setTimeout(function () {
-                handler();
+                try {
+                    handler();
+                } catch (e) {
+                    log.error(e);
+                }
             }, 10);
         }
     }

@@ -8,7 +8,8 @@ require.config({
         "bootstrap": '../lib/bootstrap/dist/js/bootstrap.min',
         "admin-lte": '../lib/admin-lte/dist/js/app',
         "text": "../lib/requirejs-text/text",
-        "camunda-bpm-sdk": "../lib/camunda-bpm-sdk-js/camunda-bpm-sdk",
+        "camunda-bpm-sdk-js": "../lib/camunda-bpm-sdk-js/camunda-bpm-sdk",
+        "mustache": "../lib/mustache.js/mustache",
         
         // Kendo UI core
         "kendo.autocomplete.min": "../lib/kendo-ui/js/kendo.autocomplete.min",
@@ -81,7 +82,7 @@ require.config({
         "kendo.webcomponents.min": "../lib/kendo-ui/js/kendo.webcomponents.min",
         "kendo.window.min": "../lib/kendo-ui/js/kendo.window.min"
     },
-    urlArgs: "ts=" +  (new Date()).getTime(),
+    // urlArgs: "ts=" +  (new Date()).getTime(),
     enforceDefine: true,
     shim: {
         "jquery": {

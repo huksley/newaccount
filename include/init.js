@@ -1,4 +1,4 @@
-define("init", [ "jquery", "admin-lte", "theme", "routing" ], function ($) {
+define("init", [ "jquery", "config", "admin-lte", "theme", "routing", "jquery.i18n" ], function ($, config) {
     /** Boot theme */
     $(".initial-invisible").css("visibility", "visible");
     $(".initial-hidden").css("display", "block");
@@ -8,4 +8,6 @@ define("init", [ "jquery", "admin-lte", "theme", "routing" ], function ($) {
         placement: 'right',
         template: '<div class="tooltip sidebar-tooltip tooltip-sidebar-collapsed" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
     });
+
+    config.apply(document);
 });
