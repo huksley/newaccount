@@ -1,10 +1,18 @@
-define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "theme" ], function ($, kendo, log, some, theme, calendar) {
+define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "theme", "config" ], function ($, kendo, log, some, theme, config) {
     log("Got kendo: " + kendo.version);
     log("Got router: " + kendo.Router);
     var router = new kendo.Router();
 
     router.bind("init", function() {
         log("Init router..");
+    });
+
+    router.bind("change", function (e) {
+        log("On route change: " + e.url + ", logged in: " + config.loggedIn());
+        if (!config.loggedIn() && e.url != "!/login" && e.url != "/" && e.url != "!/logout") {
+            e.preventDefault();
+            log("Not logged in, denied");
+        }
     });
 
     var main = [
@@ -53,8 +61,31 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
             log("Root");
             require([ "text!page/root.html" ], function (content) {
                 theme.header.off();
-                theme.body("root", null, content);    
+                theme.body("root", null, content);
             })
+        });
+
+        router.route("!/login", function () {
+            log("Login");
+            require([ "text!template/login.html" ], function (content) {
+                theme.header.off();
+                theme.body("login", function () {
+                    $(".login-button").click(function (event) {
+                        event.preventDefault();
+                        config.login($(".login-username").val(), $(".login-password").val());
+                        config.apply(document);
+                    });
+                }, content);
+                config.apply(document);
+            })
+        });
+
+        router.route("!/logout", function () {
+            log("Login");
+            theme.header.off();
+            theme.body("logout", "", "logged out");
+            config.logout();
+            config.apply(document);
         });
 
         router.bind("routeMissing", function () {

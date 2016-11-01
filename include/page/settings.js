@@ -3,7 +3,7 @@ define([ "jquery", "camunda-bpm-sdk-js", "config", "log" ], function ($, bpm, co
         mock: false,
         apiUri: config.bpmUrl,
         headers: {
-            "Authorization": "Basic " + btoa(config.bpmUsername + ":" + config.bpmPassword)
+            "Authorization": config.auth()
         }
     });
     var pds = new bpm.resource("process-definition");

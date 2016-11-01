@@ -1,4 +1,4 @@
-define("theme", [ "jquery", "log", "config" ], function ($, log, config) {
+define("theme", [ "jquery", "log", "config", "text!template/login.html" ], function ($, log, config, login) {
     var theme = {};
 
     // Populate header

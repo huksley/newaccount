@@ -10,6 +10,7 @@ require.config({
         "text": "../lib/requirejs-text/text",
         "camunda-bpm-sdk-js": "../lib/camunda-bpm-sdk-js/camunda-bpm-sdk",
         "mustache": "../lib/mustache.js/mustache",
+        "js-storage": "../lib/js-storage/js.storage",
         
         // Kendo UI core
         "kendo.autocomplete.min": "../lib/kendo-ui/js/kendo.autocomplete.min",

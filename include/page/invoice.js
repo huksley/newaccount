@@ -1,7 +1,11 @@
-define("page/invoice", [ "jquery" ], function ($) {
+define("page/invoice", [ "jquery", "config" ], function ($, config) {
     var page = {};
     page.init = function () {
-        $.ajax("/bpm/process-definition").done(function (data) {
+        $.ajax("/bpm/process-definition", {
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', config.auth());
+            }
+        }).done(function (data) {
              $("#contentx").html("X" + data);
         });
 
@@ -12,6 +16,9 @@ define("page/invoice", [ "jquery" ], function ($) {
             var number = $("#invoiceNumber").val();
             $.ajax("/bpm/process-definition/key/invoice/submit-form", {
                 method: "POST",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', config.auth());
+                },
                 data: JSON.stringify({
                     "variables": {
                         "amount": { "value": amount, "type": "string" },
@@ -20,8 +27,8 @@ define("page/invoice", [ "jquery" ], function ($) {
                     }
                 }),
                 contentType: "application/json"
-            }).done(function () {
-                $("#contentx").html("Y" + data);
+            }).done(function (data) {
+                $("#content").html("Y" + data);
             });
         });
     }
