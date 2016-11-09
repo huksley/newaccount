@@ -1,4 +1,6 @@
-# newaccount
+# New Account
+
+Proof of concept for SPA + Camunda BPM application architecture.
 
 Application to open account for business entity.
 Process declared in Camunda BPM. All integration is done using external tasks.
@@ -11,7 +13,7 @@ Process declared in Camunda BPM. All integration is done using external tasks.
   * RequireJS - JS dependency management
   * Java - [External Task execution](https://docs.camunda.org/manual/7.4/user-guide/process-engine/external-tasks/)
   
-This application is Proof of concept for SPA + Camunda BPM application architecture.
+**WARNING** This is not a real application!!! This is for demo and technology testing!
 
 ## Target process
 
