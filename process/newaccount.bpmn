@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" id="sid-0b0aaa25-3baf-4875-9d7a-0907d599a9ef" targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL" exporter="Camunda Modeler" exporterVersion="1.4.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <dataStore id="FinancialAccountingSystem" name="Financial Accounting System" isUnlimited="false">
+    <dataState id="DataState_1" />
+  </dataStore>
+  <message id="foxMessage_en" name="foxMessage_en" />
+  <collaboration id="collaboration_3">
+    <participant id="Process_Engine_1" name="New Account" processRef="newaccount" />
+  </collaboration>
+  <process id="newaccount" name="New Account" isExecutable="true" camunda:versionTag="0.1">
+    <laneSet id="laneSet_5">
+      <lane id="Approver" name="Комитет">
+        <flowNodeRef>approveOpen</flowNodeRef>
+        <flowNodeRef>ExclusiveGateway_1evliwf</flowNodeRef>
+      </lane>
+      <lane id="frontOffice" name="Фронт">
+        <flowNodeRef>needApprove</flowNodeRef>
+        <flowNodeRef>startEvent</flowNodeRef>
+        <flowNodeRef>ExclusiveGateway_09migzb</flowNodeRef>
+        <flowNodeRef>correctApplication</flowNodeRef>
+      </lane>
+      <lane id="Accountant" name="Бухгалтерия">
+        <flowNodeRef>openAccount</flowNodeRef>
+        <flowNodeRef>ExclusiveGateway_06fup6j</flowNodeRef>
+      </lane>
+      <lane id="ABS" name="АБС">
+        <flowNodeRef>sendNotify1</flowNodeRef>
+        <flowNodeRef>endEvent2</flowNodeRef>
+        <flowNodeRef>endEvent1</flowNodeRef>
+        <flowNodeRef>sendNotify2</flowNodeRef>
+        <flowNodeRef>createReport</flowNodeRef>
+      </lane>
+    </laneSet>
+    <businessRuleTask id="needApprove" name="Проверить на подтверждение" camunda:resultVariable="needApprove" camunda:decisionRef="needApprove" camunda:mapDecisionResult="singleEntry">
+      <incoming>SequenceFlow_1</incoming>
+      <outgoing>SequenceFlow_0pted0w</outgoing>
+    </businessRuleTask>
+    <startEvent id="startEvent" name="Запрос получен">
+      <outgoing>SequenceFlow_1</outgoing>
+    </startEvent>
+    <sequenceFlow id="SequenceFlow_1" name="" sourceRef="startEvent" targetRef="needApprove" />
+    <sequenceFlow id="SequenceFlow_0pted0w" sourceRef="needApprove" targetRef="ExclusiveGateway_09migzb" />
+    <exclusiveGateway id="ExclusiveGateway_09migzb">
+      <incoming>SequenceFlow_0pted0w</incoming>
+      <outgoing>SequenceFlow_10ou7im</outgoing>
+      <outgoing>SequenceFlow_1epkuyn</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_10ou7im" sourceRef="ExclusiveGateway_09migzb" targetRef="approveOpen">
+      <conditionExpression xsi:type="tFormalExpression">${needApprove}</conditionExpression>
+    </sequenceFlow>
+    <userTask id="approveOpen" name="Подтвердить открытие счета" camunda:formKey="embedded:app:forms/approve-invoice.html" camunda:candidateGroups="approver" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+      <extensionElements>
+        <camunda:taskListener event="create">
+          <camunda:script scriptFormat="javascript"><![CDATA[if(!!task.getVariable('approver')) {
+  task.setAssignee(approver);
+}]]></camunda:script>
+        </camunda:taskListener>
+        <camunda:taskListener event="assignment">
+          <camunda:script scriptFormat="javascript"><![CDATA[task.setVariable('approver', task.getAssignee());]]></camunda:script>
+        </camunda:taskListener>
+      </extensionElements>
+      <incoming>SequenceFlow_10ou7im</incoming>
+      <outgoing>SequenceFlow_1hs4e6o</outgoing>
+    </userTask>
+    <exclusiveGateway id="ExclusiveGateway_1evliwf">
+      <incoming>SequenceFlow_1hs4e6o</incoming>
+      <outgoing>SequenceFlow_06uro8y</outgoing>
+      <outgoing>SequenceFlow_0e9s0g3</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_1hs4e6o" sourceRef="approveOpen" targetRef="ExclusiveGateway_1evliwf" />
+    <sequenceFlow id="SequenceFlow_06uro8y" sourceRef="ExclusiveGateway_1evliwf" targetRef="openAccount">
+      <conditionExpression xsi:type="tFormalExpression">${approved}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1epkuyn" sourceRef="ExclusiveGateway_09migzb" targetRef="openAccount" />
+    <sequenceFlow id="SequenceFlow_0e9s0g3" sourceRef="ExclusiveGateway_1evliwf" targetRef="sendNotify1" />
+    <sequenceFlow id="SequenceFlow_1jwo6ju" sourceRef="sendNotify1" targetRef="endEvent2" />
+    <sequenceFlow id="SequenceFlow_1x872bm" sourceRef="sendNotify2" targetRef="endEvent1" />
+    <sendTask id="sendNotify1" name="Отказ в открытии" camunda:type="external" camunda:topic="sendSMS">
+      <incoming>SequenceFlow_0e9s0g3</incoming>
+      <incoming>SequenceFlow_0xx0163</incoming>
+      <outgoing>SequenceFlow_1jwo6ju</outgoing>
+    </sendTask>
+    <sequenceFlow id="SequenceFlow_1hnbs1v" sourceRef="openAccount" targetRef="ExclusiveGateway_06fup6j" />
+    <sequenceFlow id="SequenceFlow_114091f" sourceRef="ExclusiveGateway_06fup6j" targetRef="correctApplication">
+      <conditionExpression xsi:type="tFormalExpression">${needCorrection}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_0dszl7e" sourceRef="correctApplication" targetRef="openAccount" />
+    <userTask id="openAccount" name="Открыть счет" camunda:candidateGroups="accountant" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+      <incoming>SequenceFlow_06uro8y</incoming>
+      <incoming>SequenceFlow_1epkuyn</incoming>
+      <incoming>SequenceFlow_0dszl7e</incoming>
+      <outgoing>SequenceFlow_1hnbs1v</outgoing>
+    </userTask>
+    <userTask id="correctApplication" name="Доработка" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+      <incoming>SequenceFlow_114091f</incoming>
+      <outgoing>SequenceFlow_0dszl7e</outgoing>
+    </userTask>
+    <endEvent id="endEvent2" name="Отказ">
+      <incoming>SequenceFlow_1jwo6ju</incoming>
+      <terminateEventDefinition />
+    </endEvent>
+    <exclusiveGateway id="ExclusiveGateway_06fup6j">
+      <incoming>SequenceFlow_1hnbs1v</incoming>
+      <outgoing>SequenceFlow_114091f</outgoing>
+      <outgoing>SequenceFlow_097uqqv</outgoing>
+      <outgoing>SequenceFlow_0xx0163</outgoing>
+    </exclusiveGateway>
+    <endEvent id="endEvent1" name="Счет открыт">
+      <incoming>SequenceFlow_1x872bm</incoming>
+    </endEvent>
+    <sendTask id="sendNotify2" name="Счет открыт" camunda:type="external" camunda:topic="sendSMS">
+      <incoming>SequenceFlow_09qyy49</incoming>
+      <outgoing>SequenceFlow_1x872bm</outgoing>
+    </sendTask>
+    <sequenceFlow id="SequenceFlow_097uqqv" sourceRef="ExclusiveGateway_06fup6j" targetRef="createReport" />
+    <sequenceFlow id="SequenceFlow_09qyy49" sourceRef="createReport" targetRef="sendNotify2" />
+    <serviceTask id="createReport" name="Подготовить отчет" camunda:type="external" camunda:topic="createReport">
+      <incoming>SequenceFlow_097uqqv</incoming>
+      <outgoing>SequenceFlow_09qyy49</outgoing>
+    </serviceTask>
+    <sequenceFlow id="SequenceFlow_0xx0163" sourceRef="ExclusiveGateway_06fup6j" targetRef="sendNotify1">
+      <conditionExpression xsi:type="tFormalExpression">${denied}</conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_73">
+    <bpmndi:BPMNPlane id="BPMNPlane_73" bpmnElement="collaboration_3">
+      <bpmndi:BPMNShape id="Process_Engine_1_gui" bpmnElement="Process_Engine_1" isHorizontal="true">
+        <omgdc:Bounds x="0" y="12" width="1097" height="615" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Freigebender_105_gui" bpmnElement="Approver" isHorizontal="true">
+        <omgdc:Bounds x="30" y="182" width="1067" height="161" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Team-Assistenz_110_gui" bpmnElement="frontOffice" isHorizontal="true">
+        <omgdc:Bounds x="30" y="12" width="1067" height="171" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Buchhaltung_119_gui" bpmnElement="Accountant" isHorizontal="true">
+        <omgdc:Bounds x="30" y="342" width="1067" height="144" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Rechnung_freigeben_125_gui" bpmnElement="approveOpen" isHorizontal="true">
+        <omgdc:Bounds x="315" y="224" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Freigebenden_zuordnen_143_gui" bpmnElement="needApprove" isHorizontal="true">
+        <omgdc:Bounds x="180" y="52" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Rechnungseingang_abgearbeitet_174_gui" bpmnElement="endEvent1" isHorizontal="true">
+        <omgdc:Bounds x="1035" y="545" width="28" height="28" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1018" y="578" width="63" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_3" bpmnElement="startEvent">
+        <omgdc:Bounds x="96" y="78" width="28" height="28" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="69" y="111" width="82" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="SequenceFlow_1" sourceElement="_BPMNShape_StartEvent_3" targetElement="Freigebenden_zuordnen_143_gui">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="124" y="92" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="180" y="92" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Lane_1u2kl1s_di" bpmnElement="ABS">
+        <omgdc:Bounds x="30" y="486" width="1067" height="141" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_09migzb_di" bpmnElement="ExclusiveGateway_09migzb" isMarkerVisible="true">
+        <omgdc:Bounds x="339.7425149700599" y="67" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="365" y="117" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0pted0w_di" bpmnElement="SequenceFlow_0pted0w">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="280" y="92" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="340" y="92" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="310" y="77" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_10ou7im_di" bpmnElement="SequenceFlow_10ou7im">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="365" y="117" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="365" y="171" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="365" y="171" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="365" y="224" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="380" y="171" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1evliwf_di" bpmnElement="ExclusiveGateway_1evliwf" isMarkerVisible="true">
+        <omgdc:Bounds x="473.7425149700599" y="239" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="499" y="289" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1hs4e6o_di" bpmnElement="SequenceFlow_1hs4e6o">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="415" y="264" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="474" y="264" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="445" y="239" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_06uro8y_di" bpmnElement="SequenceFlow_06uro8y">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="504" y="283" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="543" y="420" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="602" y="420" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="524" y="336.5" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1epkuyn_di" bpmnElement="SequenceFlow_1epkuyn">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="390" y="92" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="652" y="92" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="652" y="380" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="521" y="77" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1103fam_di" bpmnElement="openAccount">
+        <omgdc:Bounds x="602" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0e9s0g3_di" bpmnElement="SequenceFlow_0e9s0g3">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="499" y="289" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="499" y="559" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="548" y="559" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="514" y="424" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1jwo6ju_di" bpmnElement="SequenceFlow_1jwo6ju">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="648" y="559" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="671" y="559" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="660" y="544" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1x872bm_di" bpmnElement="SequenceFlow_1x872bm">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="994" y="559" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="1036" y="559" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1015" y="544" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SendTask_1pj7382_di" bpmnElement="sendNotify2">
+        <omgdc:Bounds x="894" y="519" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendTask_0u94w77_di" bpmnElement="sendNotify1">
+        <omgdc:Bounds x="548" y="519" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1hnbs1v_di" bpmnElement="SequenceFlow_1hnbs1v">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="702" y="420" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="778" y="420" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="740" y="405" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0xsahy2_di" bpmnElement="correctApplication">
+        <omgdc:Bounds x="753" y="52" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_114091f_di" bpmnElement="SequenceFlow_114091f">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="395" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="264" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="264" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="132" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="818" y="264" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0dszl7e_di" bpmnElement="SequenceFlow_0dszl7e">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="753" y="92" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="728" y="92" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="728" y="400" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="702" y="407" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="743" y="246" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_118dqux_di" bpmnElement="endEvent2">
+        <omgdc:Bounds x="671" y="541" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="673" y="577" width="31" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_15vadh9_di" bpmnElement="ExclusiveGateway_06fup6j" isMarkerVisible="true">
+        <omgdc:Bounds x="778" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="803" y="445" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_097uqqv_di" bpmnElement="SequenceFlow_097uqqv">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="445" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="482" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="482" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="803" y="519" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="818" y="482" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_09qyy49_di" bpmnElement="SequenceFlow_09qyy49">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="853" y="559" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="894" y="559" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="874" y="544" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1t4qgb3_di" bpmnElement="createReport">
+        <omgdc:Bounds x="753" y="519" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0xx0163_di" bpmnElement="SequenceFlow_0xx0163">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="792" y="434" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="647" y="528" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="720" y="466" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

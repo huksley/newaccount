@@ -24,12 +24,17 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
      * @var routes
      */
     routes = [
-        [ "calendar", "fa fa-calendar", "Платежный календарь" ],
+        [ "newApplication", "fa fa-user-plus", "Новая заявка" ],
+        [ "correctApplication", "fa fa-edit", "Заявки на доработку" ],
+        [ "approveOpen", "fa fa-legal", "Подтвердить заявку" ],
+        [ "openAccount", "fa fa-money", "Открыть счет" ],
+        /*
         [ "invoice", "fa fa-money", "BPM" ],
         [ "upload", "fa fa-upload", "Загрузка файлов" ],
         [ "settings", "fa fa-cog", "Настройки" ],
         [ "help", "fa fa-question-circle", "Справка" ],
         [ "demo", "fa fa-question-circle", "Demo" ],
+        */
         [ "exit", "fa fa-remove", "Выход" ]
     ];
 
