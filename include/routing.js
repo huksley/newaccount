@@ -25,7 +25,7 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
      */
     routes = [
         [ "newApplication", "fa fa-user-plus", "Новая заявка" ],
-        [ "correctApplication", "fa fa-edit", "Заявки на доработку" ],
+        [ "correctApplication", "fa fa-pencil", "Заявки на доработку" ],
         [ "approveOpen", "fa fa-legal", "Подтвердить заявку" ],
         [ "openAccount", "fa fa-money", "Открыть счет" ],
         /*
@@ -53,6 +53,11 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
                 var icon = arguments.callee.icon;
                 var title = arguments.callee.title;
                 log("Routing to " + name);
+                if ($('#desktopTest').is(':hidden')) {
+                    // Recollapse sidebar
+                    // HACK: http://stackoverflow.com/questions/14441456/how-to-detect-which-device-view-youre-on-using-twitter-bootstrap-api
+                    $(".sidebar-toggle").click();
+                }
                 require.undef("text!page/" + name + ".html");
                 require.undef("page/" + name);
                 require([ "text!page/" + name + ".html", "page/" + name ], function (content, page) {
