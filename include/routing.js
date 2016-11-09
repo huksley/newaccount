@@ -16,6 +16,9 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
         if (!config.loggedIn() && e.url != "!/login" && e.url != "/" && e.url != "!/logout") {
             e.preventDefault();
             log("Not logged in, denied");
+            window.setTimeout(function () {
+                window.location = "#!/login";
+            }, 100);
         }
     });
     
@@ -93,6 +96,9 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
                         event.preventDefault();
                         config.login($(".login-username").val(), $(".login-password").val());
                         config.apply(document);
+                        window.setTimeout(function () {
+                            window.location = "#/";
+                        }, 100);
                     });
                 }, content);
                 config.apply(document);
