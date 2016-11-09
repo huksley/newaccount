@@ -16,6 +16,11 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
         if (!config.loggedIn() && e.url != "!/login" && e.url != "/" && e.url != "!/logout") {
             e.preventDefault();
             log("Not logged in, denied");
+            if ($('#desktopTest').is(':hidden')) {
+                // Recollapse sidebar
+                // HACK: http://stackoverflow.com/questions/14441456/how-to-detect-which-device-view-youre-on-using-twitter-bootstrap-api
+                $(".sidebar-toggle").click();
+            }
             window.setTimeout(function () {
                 window.location = "#!/login";
             }, 100);
