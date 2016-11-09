@@ -1,3 +1,9 @@
+/**
+ * Initializes web application, theme and routing.
+ * @module init
+ * @see module:config
+ * @see module:theme
+ */
 define("init", [ "jquery", "config", "admin-lte", "theme", "routing", "jquery.i18n" ], function ($, config) {
     /** Boot theme */
     $(".initial-invisible").css("visibility", "visible");

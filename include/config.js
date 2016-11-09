@@ -1,13 +1,10 @@
-/**
- * Defines runtime configuration module <b>config</b>
- * @module config
- */
 define("config", [ "jquery", "js-storage" ], function($, storage) {
     /**
-     * Default configuration
+     * Defines configuration and storage for application.
+     * 
      * @exports config
      */
-    var conf = {
+    var config = {
         version: "0.1",
         years: "2016",
         copyright: "All rights reserved.",
@@ -19,8 +16,9 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
         anonymous: "Not logged in",
 
         /**
-         * True if logged in, false not.
-         * Call config.login(username, password) to store state.
+         * Checks whether user is logged in.
+         * @see config.login(username, password) to store state.
+         * @return {boolean} - <code>true</code> if logged in, <code>false</code> otherwise.
          */
         loggedIn: function () {
             return !!storage.localStorage.get("loggedIn");
@@ -28,6 +26,9 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
 
         /**
          * Saves login information.
+         * @param {string} username User`s name
+         * @param {string} password User`s password
+         * @return {void}
          */
         login: function (username, password) {
             storage.localStorage.set("loggedIn", true);
@@ -37,6 +38,7 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
 
         /**
          * Removes login information.
+         * @return {void}
          */
         logout: function () {
             storage.localStorage.remove("loggedIn");
@@ -46,26 +48,30 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
 
         /**
          * Produce authorization header for XHR requests
+         * @return {string} <code>Authorization</code> header value.
          */
         auth: function () {
             return "Basic " + btoa(storage.localStorage.get("username") + ":" + storage.localStorage.get("password"));
         },
 
         /** 
-         * Returns current username
+         * Current username
+         * @return {string} Current username 
          */
         username: function () {
             return storage.localStorage.get("username");
         },
 
         /**
-         * Given element (or jQuery expression) applies all config keys to elements with data-config="key" defined.
-         * Available syntax:
-         * <ul>
-         *  &lt;element data-config="key,key2,...">Initial value&lt;/element> - Will replace innerHTML with content.
-         *  &lt;element data-config="attr:key,..." attr="Intiial value"/> - Will replace attribute attr with content.
-         * </ul>
+         * Given element (or jQuery expression) applies all config keys to elements with data-config="key" defined. 
          * Only first defined value will be replaced if multiple keys specified.
+         * 
+         * @example
+         * // Will replace innerHTML with content:
+         *  <element data-config="key,key2,...">Initial value</element>
+         * @example  
+         * // Will replace attribute attr with content:
+         *  <element data-config="attr:key,..." attr="Initial value"/>
          */
         apply: function (el) {
             var l = $(el).find("[data-config]");
@@ -80,23 +86,24 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
                             // attr:name
                             var attr = key.substring(0, key.indexOf(":"));
                             key = key.substring(key.indexOf(":") + 1);
-                            if (conf.applyKey(key, e, attr)) {
+                            if (config.applyKey(key, e, attr)) {
                                 break;
                             }
                         } else {
-                            if (conf.applyKey(key, e)) {
+                            if (config.applyKey(key, e)) {
                                 break;
                             }
                         }
                     }
                 } else {
-                    conf.applyKey(key, e);
+                    config.applyKey(key, e);
                 }
             }
         },
 
         /**
          * Apply single key, either from configuration or from localStorage.
+         * @private
          */
         applyKey: function (key, e, attr) {
             var success = false;
@@ -112,8 +119,8 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
                      success = true;
                 }
             } else
-            if (conf[key] != undefined && typeof conf[key] != "function" ) {
-                var val = conf[key];
+            if (config[key] != undefined && typeof config[key] != "function" ) {
+                var val = config[key];
                 if (attr) {
                      console.log("Replacing " + key + " [@" + attr + "] = " + val);
                      $(e).attr(attr, val);
@@ -128,5 +135,5 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
         }
     };
 
-    return conf;
+    return config;
 });

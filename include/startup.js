@@ -1,3 +1,9 @@
+/**
+ * Starts application, defines RequireJS paths for libraries.
+ * @module startup
+ * @see module:init
+ * @see module:routing
+ */
 require.config({
     baseUrl: 'include',
     paths: {

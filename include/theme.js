@@ -1,7 +1,22 @@
-define("theme", [ "jquery", "log", "config", "text!template/login.html" ], function ($, log, config, login) {
-    var theme = {};
 
-    // Populate header
+define("theme", [ "jquery", "log", "config", "text!template/login.html" ], function ($, log, config, login) {
+    /**
+     * Provides theme specific methods
+     * @exports module:theme
+     * @requires jquery
+     * @requires log
+     * @requires config
+     */
+    var theme = {};
+    theme.header = {};
+
+    /**
+     * Populate header
+     * @function
+     * @param {string} title
+     * @param {string} description
+     * @param {icon} icon
+     **/
     theme.header = function (title, description, icon) {
         if (arguments.length == 0) {
             return;
@@ -19,11 +34,21 @@ define("theme", [ "jquery", "log", "config", "text!template/login.html" ], funct
         }, 10);
     }
     
+    /**
+     * Turn off header
+     * @alias module:theme.header.off
+     **/
     theme.header.off = function () {
         $(".content-header").hide();
     }
 
-    // Switch body
+    /**
+     * Replace body content with specified content
+     * @function
+     * @param {string} id - New body id, if no content specified will load from html
+     * @param {function} handler - Function to call after content populated
+     * @param {string} content - HTML content to update
+     **/
     theme.body = function (id, handler, content) {
         $("#content").html("");
         if (content == null) {
