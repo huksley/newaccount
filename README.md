@@ -11,3 +11,5 @@ Process declared in Camunda BPM. All integration is done using external tasks.
   * RequireJS - JS dependency management
   
 This application is Proof of concept for SPA + Camunda BPM application architecture.
+
+![Image of process](process/newaccount.png)
