@@ -2,8 +2,7 @@
 
 Proof of concept for SPA + Camunda BPM application architecture.
 
-Application to open account for business entity.
-Process declared in Camunda BPM. All integration is done using external tasks.
+Processing applications to open bank account for business entity.
 
   * Camunda BPM - process orchestration, auth
   * AdminLTE - application theme, forms
