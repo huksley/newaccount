@@ -3,7 +3,7 @@
   <decision id="needApprove" name="Проверить на подтверждение">
     <decisionTable id="decisionTable" hitPolicy="FIRST">
       <input id="clause1" label="Годовой оборот" camunda:inputVariable="">
-        <inputExpression id="inputExpression1" typeRef="double">        <text>${yearlyTurnover}</text>
+        <inputExpression id="inputExpression1" typeRef="long">        <text>yearlyTurnover</text>
 </inputExpression>
       </input>
       <output id="clause3" label="Нужно подтверждение" name="needApprove" typeRef="boolean" />
@@ -16,7 +16,7 @@
       </rule>
       <rule id="DecisionRule_1ak4z14">
         <description>Нужно подтверждение открытия счета</description>
-        <inputEntry id="LiteralExpression_0qmsef6">        <text></text>
+        <inputEntry id="LiteralExpression_0qmsef6">        <text><![CDATA[>1000000]]></text>
 </inputEntry>
         <outputEntry id="LiteralExpression_05xxvip">        <text>true</text>
 </outputEntry>
