@@ -32,17 +32,17 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
      * @var routes
      */
     routes = [
+        "MAIN",
         [ "newApplication", "fa fa-user-plus", "Новая заявка" ],
         [ "correctApplication", "fa fa-pencil", "Заявки на доработку" ],
         [ "approveOpen", "fa fa-legal", "Подтвердить заявку" ],
         [ "openAccount", "fa fa-money", "Открыть счет" ],
-        /*
+        "UTILS",
         [ "invoice", "fa fa-money", "BPM" ],
         [ "upload", "fa fa-upload", "Загрузка файлов" ],
         [ "settings", "fa fa-cog", "Настройки" ],
         [ "help", "fa fa-question-circle", "Справка" ],
         [ "demo", "fa fa-question-circle", "Demo" ],
-        */
         [ "exit", "fa fa-remove", "Выход" ]
     ];
 
@@ -50,37 +50,41 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
     $("#routing-main").each(function (index, el) {
         var s = "";
         for (var i = 0; i < routes.length; i++) {
-            var name = routes[i][0];
-            var icon = routes[i][1];
-            var title = routes[i][2];
-            s += "<li class=\"menu-item\"><a href=\"#!/" + name + "\" title=\"" + title + "\"><i class=\"" + icon + "\"></i> <span>" + title + "</span></a></li>";
-                 
-            // Define route programatically
-            var handler = function () {
-                var name = arguments.callee.route;
-                var icon = arguments.callee.icon;
-                var title = arguments.callee.title;
-                log("Routing to " + name);
-                if ($('#desktopTest').is(':hidden')) {
-                    // Recollapse sidebar
-                    // HACK: http://stackoverflow.com/questions/14441456/how-to-detect-which-device-view-youre-on-using-twitter-bootstrap-api
-                    $(".sidebar-toggle").click();
-                }
-                require.undef("text!page/" + name + ".html");
-                require.undef("page/" + name);
-                require([ "text!page/" + name + ".html", "page/" + name ], function (content, page) {
-                    theme.header(name, title, icon);
-                    theme.body(name, function () {
-                        if (page) {
-                            page.init();
-                        }
-                    }, content);
-                });
-            };
-            handler.route = name;
-            handler.icon = icon;
-            handler.title = title;
-            routing.route("!/" + name, handler);
+            if (typeof routes[i] == "string") {
+                s += "<li class=\"header\">" + routes[i] + "</li><li class=\"header-collapsed\">...</li>";
+            } else {
+                var name = routes[i][0];
+                var icon = routes[i][1];
+                var title = routes[i][2];
+                s += "<li class=\"menu-item\"><a href=\"#!/" + name + "\" title=\"" + title + "\"><i class=\"" + icon + "\"></i> <span>" + title + "</span></a></li>";
+                    
+                // Define route programatically
+                var handler = function () {
+                    var name = arguments.callee.route;
+                    var icon = arguments.callee.icon;
+                    var title = arguments.callee.title;
+                    log("Routing to " + name);
+                    if ($('#desktopTest').is(':hidden')) {
+                        // Recollapse sidebar
+                        // HACK: http://stackoverflow.com/questions/14441456/how-to-detect-which-device-view-youre-on-using-twitter-bootstrap-api
+                        $(".sidebar-toggle").click();
+                    }
+                    require.undef("text!page/" + name + ".html");
+                    require.undef("page/" + name);
+                    require([ "text!page/" + name + ".html", "page/" + name ], function (content, page) {
+                        theme.header(name, title, icon);
+                        theme.body(name, function () {
+                            if (page) {
+                                page.init();
+                            }
+                        }, content);
+                    });
+                };
+                handler.route = name;
+                handler.icon = icon;
+                handler.title = title;
+                routing.route("!/" + name, handler);
+            }
         }
         $(el).append(s);
 
