@@ -36,6 +36,17 @@
       <outgoing>SequenceFlow_0pted0w</outgoing>
     </businessRuleTask>
     <startEvent id="startEvent" name="Запрос получен">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="yearlyTurnover" label="Ежегодный оборот (yearlyTurnover)" type="long" defaultValue="0" />
+          <camunda:formField id="activity" label="Вид деятельности (activity)" type="enum">
+            <camunda:value id="sales" name="Продажа" />
+            <camunda:value id="other" name="Другое" />
+          </camunda:formField>
+          <camunda:formField id="address" label="Адрес организации (address)" type="string" />
+          <camunda:formField id="fullName" label="Наименование организации (fullName)" type="string" />
+        </camunda:formData>
+      </extensionElements>
       <outgoing>SequenceFlow_1</outgoing>
     </startEvent>
     <sequenceFlow id="SequenceFlow_1" name="" sourceRef="startEvent" targetRef="needApprove" />
@@ -48,7 +59,7 @@
     <sequenceFlow id="SequenceFlow_10ou7im" sourceRef="ExclusiveGateway_09migzb" targetRef="approveOpen">
       <conditionExpression xsi:type="tFormalExpression">${needApprove}</conditionExpression>
     </sequenceFlow>
-    <userTask id="approveOpen" name="Подтвердить открытие счета" camunda:formKey="embedded:app:forms/approve-invoice.html" camunda:candidateGroups="approver" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+    <userTask id="approveOpen" name="Подтвердить открытие счета" camunda:candidateGroups="approver" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
       <extensionElements>
         <camunda:taskListener event="create">
           <camunda:script scriptFormat="javascript"><![CDATA[if(!!task.getVariable('approver')) {
@@ -58,6 +69,10 @@
         <camunda:taskListener event="assignment">
           <camunda:script scriptFormat="javascript"><![CDATA[task.setVariable('approver', task.getAssignee());]]></camunda:script>
         </camunda:taskListener>
+        <camunda:formData>
+          <camunda:formField id="approved" label="Подтвердить (approved)" type="boolean" defaultValue="true" />
+          <camunda:formField id="approvedFalseReason" label="Комментарий (approvedFalseReason)" type="string" />
+        </camunda:formData>
       </extensionElements>
       <incoming>SequenceFlow_10ou7im</incoming>
       <outgoing>SequenceFlow_1hs4e6o</outgoing>
@@ -85,13 +100,33 @@
       <conditionExpression xsi:type="tFormalExpression">${needCorrection}</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="SequenceFlow_0dszl7e" sourceRef="correctApplication" targetRef="openAccount" />
-    <userTask id="openAccount" name="Открыть счет" camunda:candidateGroups="accountant" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+    <userTask id="openAccount" name="Открыть счет" camunda:candidateGroups="accounting" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="accountNumber" label="Номер счета (accountNumber)" type="string" />
+          <camunda:formField id="needCorrection" label="Доработка (needCorrection)" type="boolean" defaultValue="false" />
+          <camunda:formField id="needCorrectionReason" label="Причина доработки (needCorrectionReason)" type="string" />
+          <camunda:formField id="denied" label="Отказ в открытии счета (denied)" type="boolean" />
+          <camunda:formField id="deniedReason" label="Причина отказа (deniedReason)" type="string" />
+        </camunda:formData>
+      </extensionElements>
       <incoming>SequenceFlow_06uro8y</incoming>
       <incoming>SequenceFlow_1epkuyn</incoming>
       <incoming>SequenceFlow_0dszl7e</incoming>
       <outgoing>SequenceFlow_1hnbs1v</outgoing>
     </userTask>
-    <userTask id="correctApplication" name="Доработка" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+    <userTask id="correctApplication" name="Доработка" camunda:candidateGroups="front" camunda:dueDate="${dateTime().plusWeeks(1).toDate()}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="yearlyTurnover" label="Ежегодный оборот (yearlyTurnover)" type="long" defaultValue="0" />
+          <camunda:formField id="activity" label="Вид деятельности (activity)" type="enum">
+            <camunda:value id="sales" name="Продажа" />
+            <camunda:value id="other" name="Другое" />
+          </camunda:formField>
+          <camunda:formField id="address" label="Адрес организации (address)" type="string" />
+          <camunda:formField id="fullName" label="Наименование организации (fullName)" type="string" />
+        </camunda:formData>
+      </extensionElements>
       <incoming>SequenceFlow_114091f</incoming>
       <outgoing>SequenceFlow_0dszl7e</outgoing>
     </userTask>
