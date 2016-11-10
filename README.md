@@ -17,3 +17,12 @@ Processing applications to open bank account for business entity.
 ## Target process
 
 ![Image of process](process/newaccount.png)
+
+## Structure
+
+  * SPA HTML5 webapp
+  * Apache Http 2.4
+  * Java task executor application
+  * Camunda BPM 7.5.0 bundle
+  
+Camunda BPM localhost:8080/engine -> localhost:80/bpm
