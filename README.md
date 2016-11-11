@@ -48,9 +48,9 @@ Camunda BPM localhost:8080/engine -> localhost:80/bpm
 ## Useful links
 
   * [app](http://localhost/newaccount/index.html)
-  * http://localhost:8080/camunda/app/cockpit/
-  * http://localhost:8080/camunda/app/tasklist/
-  * http://localhost:8080/camunda/app/admin/
-  * http://localhost:8080/manager/html
+  * [cockpit - monitor processes](http://localhost:8080/camunda/app/cockpit/)
+  * [tasklist - execute processes](http://localhost:8080/camunda/app/tasklist/)
+  * [admin - manage users](http://localhost:8080/camunda/app/admin/)
+  * [tomcat manager - reload apps](http://localhost:8080/manager/html)
   
 
