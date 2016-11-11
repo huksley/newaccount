@@ -40,4 +40,7 @@ Camunda BPM localhost:8080/engine -> localhost:80/bpm
   * Modify httpd.conf - add ``ProxyPass /bpm/ http://localhost:8080/engine-rest/``
   * git clone newaccount inside Apache24/htdocs
   * Launch http://localhost/newaccount/index.html
+  * Login into app using demo:demo
+  * Upload process
+  * Start new process using "Open new account"
 
