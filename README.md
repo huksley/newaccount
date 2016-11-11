@@ -8,9 +8,11 @@ Processing applications to open bank account for business entity.
   * AdminLTE - application theme, forms
   * jQuery - JS framework
   * Bootstrap - UI foundation
-  * Kendo UI - Routing framework
+  * Kendo UI - Routing framework (for now)
   * RequireJS - JS dependency management
   * Java - [External Task execution](https://docs.camunda.org/manual/7.4/user-guide/process-engine/external-tasks/)
+  * Vue.JS - MVVM framework
+  * Apache 2.4 - web server
   
 **WARNING** This is not a real application!!! This is for demo and technology testing!
 
