@@ -56,6 +56,7 @@ define([ "jquery", "log", "config" ], function ($, log, config) {
                 },
                 success: function (data) {
                     console.log(data);
+                    $("#content").html("Uploaded.");
                 }
             });
         });
