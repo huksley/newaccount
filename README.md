@@ -31,10 +31,10 @@ Camunda BPM localhost:8080/engine -> localhost:80/bpm
 
 ## Installation and usage
 
-  * Download Camunda BPM tomcat bundle via https://camunda.org/download/
+  * Download Camunda BPM tomcat bundle from [camunda.org](https://camunda.org/download/)
   * Extract Camunda BPM tomcat bundle 
   * Download task-executor.war and place into server/apache-tomcat-*/webapps folder inside Camunda BPM tomcat bundle
-  * Enable authentication in engine-rest as per documentation
+  * Enable authentication in engine-rest as per [documentation](https://docs.camunda.org/manual/7.5/reference/rest/overview/authentication/)
   * Execute start-camunda
   * Install Apache 2.4
   * Modify httpd.conf - add ``ProxyPass /bpm/ http://localhost:8080/engine-rest/``
