@@ -4,15 +4,15 @@ Proof of concept for SPA + Camunda BPM application architecture.
 
 Processing applications to open bank account for business entity.
 
-  * Camunda BPM - process orchestration, auth
-  * AdminLTE - application theme, forms
-  * jQuery - JS framework
-  * Bootstrap - UI foundation
-  * Kendo UI - Routing framework (for now)
-  * RequireJS - JS dependency management
-  * Java - [External Task execution](https://docs.camunda.org/manual/7.4/user-guide/process-engine/external-tasks/)
-  * Vue.JS - MVVM framework
-  * Apache 2.4 - web server
+  * [Camunda BPM](https://camunda.org/) - process orchestration, auth
+  * [AdminLTE](https://almsaeedstudio.com/themes/AdminLTE/index2.html) - application theme, forms
+  * [jQuery](https://jquery.com/) - JS framework
+  * [Bootstrap](http://getbootstrap.com/) - UI foundation
+  * [Kendo UI](http://www.telerik.com/kendo-ui/open-source-core) - Routing framework (for now)
+  * [RequireJS](http://requirejs.org/) - JS dependency management
+  * [Java8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) - [External Task execution](https://docs.camunda.org/manual/7.4/user-guide/process-engine/external-tasks/)
+  * [Vue.JS](https://vuejs.org/v2/guide/) - MVVM framework
+  * [Apache 2.4](http://httpd.apache.org/) - Web server
   
 **WARNING** This is not a real application!!! This is for demo and technology testing!
 
