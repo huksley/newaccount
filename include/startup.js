@@ -17,7 +17,8 @@ require.config({
         "camunda-bpm-sdk-js": "../lib/camunda-bpm-sdk-js/camunda-bpm-sdk",
         "mustache": "../lib/mustache.js/mustache",
         "js-storage": "../lib/js-storage/js.storage",
-        
+        "vue": "../lib/vue/dist/vue",
+
         // Kendo UI core
         "kendo.autocomplete.min": "../lib/kendo-ui/js/kendo.autocomplete.min",
         "kendo.binder.min": "../lib/kendo-ui/js/kendo.binder.min",

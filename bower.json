@@ -17,7 +17,8 @@
     "jquery-i18n": "jquery.i18n#^1.0.4",
     "mustache.js": "mustache#^2.2.1",
     "less": "^2.7.1",
-    "js-storage": "^1.0.1"
+    "js-storage": "^1.0.1",
+    "vue": "^2.0.5"
   },
   "main": "index.js",
   "description": "Sample web frontend",
