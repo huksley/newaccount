@@ -150,7 +150,7 @@ public class ExternalTaskExecutor implements Runnable {
 					}
 					params.clear();
 					params.put("workerId", "test1");
-					String url = "http://192.168.1.2/sendsms.php?phone=" + phone + "&sendsms=1&text=" + URLEncoder.encode(msg, "UTF-8");
+					String url = "http://192.168.1.2/sendsms.php?phone=" + URLEncoder.encode(phone, "UTF-8") + "&sendsms=1&text=" + URLEncoder.encode(msg, "UTF-8");
 					log.info("Calling " + url);
 					burp(Method.GET, url, null);
 					post = gson.toJson(params);
