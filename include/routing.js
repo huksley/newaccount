@@ -34,15 +34,19 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
     routes = [
         "MAIN",
         [ "newApplication", "fa fa-user-plus", "Новая заявка" ],
-        [ "correctApplication", "fa fa-pencil", "Заявки на доработку" ],
-        [ "approveOpen", "fa fa-legal", "Подтвердить заявку" ],
-        [ "openAccount", "fa fa-money", "Открыть счет" ],
+        [ "correctApplication", "fa fa-pencil", "Заявки на доработку", " <span class=\"pull-right-container\"><span class=\"label label-danger pull-right\" id=\"correctApplicationCount\"></span></span>" ],
+        [ "approveOpen", "fa fa-legal", "Подтвердить заявку", " <span class=\"pull-right-container\"><span class=\"label label-warning pull-right\" id=\"approveOpenCount\"></span></span>" ],
+        [ "openAccount", "fa fa-money", "Открыть счет", " <span class=\"pull-right-container\"><span class=\"label label-primary pull-right\" id=\"openAccountCount\"></span></span>" ],
         "UTILS",
+        /*
         [ "invoice", "fa fa-money", "BPM" ],
-        [ "upload", "fa fa-upload", "Загрузка файлов" ],
+        */
+        [ "upload", "fa fa-upload", "Загрузить процесс" ],
+        /*
         [ "settings", "fa fa-cog", "Настройки" ],
         [ "help", "fa fa-question-circle", "Справка" ],
         [ "demo", "fa fa-question-circle", "Demo" ],
+        */
         [ "exit", "fa fa-remove", "Выход" ]
     ];
 
@@ -56,10 +60,13 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
                 var name = routes[i][0];
                 var icon = routes[i][1];
                 var title = routes[i][2];
-                s += "<li class=\"menu-item\"><a href=\"#!/" + name + "\" title=\"" + title + "\"><i class=\"" + icon + "\"></i> <span>" + title + "</span></a></li>";
+                var badge = routes[i][3];
+                badge = badge ? badge : "";
+                s += "<li class=\"menu-item\"><a href=\"#!/" + name + "\" title=\"" + title + "\"><i class=\"" + icon + "\"></i> <span>" + title + badge + "</span></a></li>";
                     
                 // Define route programatically
                 var handler = function () {
+                    var args = arguments;
                     var name = arguments.callee.route;
                     var icon = arguments.callee.icon;
                     var title = arguments.callee.title;
@@ -75,7 +82,7 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
                         theme.header(name, title, icon);
                         theme.body(name, function () {
                             if (page) {
-                                page.init();
+                                page.init.apply(page, args);
                             }
                         }, content);
                     });
@@ -84,6 +91,7 @@ define("routing", [ "jquery", "kendo.core.min", "log", "kendo.router.min", "them
                 handler.icon = icon;
                 handler.title = title;
                 routing.route("!/" + name, handler);
+                routing.route("!/" + name + "/:id", handler);
             }
         }
         $(el).append(s);
