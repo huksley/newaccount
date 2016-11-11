@@ -1,65 +1,103 @@
-<div id="correctApplication">
+<div class="row" id="correctApplication">
 
-    <div class="alert alert-warning">
-                <h4><i class="icon fa fa-warning"></i> Ошибки</h4>
-                <div>
-                    Нет такого адреса, уточните адрес у клиента.
-                </div>
-            </div>
-    <div class="box box-warning">
-        <div class="box-header with-border">
-            <h3 class="box-title">Корректировка заявки на открытие счета</h3>
+    <div class="col-md-12" v-if="tasks.length == 0">
+        <div class="hero-title-sm">
+            Нет заявок на доработку
         </div>
-        <div class="box-body">
-            <form class="form-horizontal" action="#">
-                <div class="form-group">
-                    <label class="control-label col-lg-3">Наименование организации</label>
-                    <div class="col-lg-9">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-quote-left"></i></span>
-                            <input type="text" id="fullName" class="form-control" value="Рога и Копыта">
-                            <span class="input-group-addon"><i class="fa fa-quote-right"></i></span>
-                        </div>
+    </div>
+
+    <div class="col-md-3 table-responsive" v-if="tasks.length > 0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><i class="fa fa-quote-left"></i> <i class="fa fa-quote-right"></i> </th>
+                    <th><i class="fa fa-money"></i></th>
+                    <th><i class="fa fa-list"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="task in tasks" :key="task.id" v-on:click="clickTask(task.id, task.index, $event)">
+                    <td>{{ task.variables.fullName.value }}</td>
+                    <td>{{ task.variables.yearlyTurnover.value }}</td>
+                    <td>{{ task.variables.activity.value }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-9" v-if="currentTask">
+
+        <div class="alert alert-warning">
+                    <h4><i class="icon fa fa-warning"></i> Ошибки</h4>
+                    <div>
+                        {{ currentTask.variables.needCorrectionReason.value }}
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="control-label col-lg-3">Ежегодный оборот</label>
-                    <div class="col-lg-9">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-money"></i></span>
-                            <input type="text" id="yearlyTurnover" class="form-control" value="1000000">
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">Корректировка заявки на открытие счета</h3>
+            </div>
+            <div class="box-body">
+                <form class="form-horizontal" action="#">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Наименование организации</label>
+                        <div class="col-lg-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-quote-left"></i></span>
+                                <input type="text" v-model="currentTask.variables.fullName.value" class="form-control" value="Рога и Копыта">
+                                <span class="input-group-addon"><i class="fa fa-quote-right"></i></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="control-label col-lg-3">Вид деятельности</label>
-                    <div class="col-lg-9">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-list"></i></span>
-                            <select id="activity" class="form-control">
-                                <option value="sales">Продажа</option>
-                                <option value="other">Другое</option>
-                            </select>
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Ежегодный оборот</label>
+                        <div class="col-lg-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                                <input type="text" v-model="currentTask.variables.yearlyTurnover.value" class="form-control" value="1000000">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="control-label col-lg-3">Адрес организации</label>
-                    <div class="col-lg-9">
-                        <div class="input-group">
-                            <span class="input-group-addon" style="min-width: 39px"><i class="fa fa-map-marker"></i></span>
-                            <textarea rows="3" id="address" class="form-control" placeholder="Введите адрес"></textarea>
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Вид деятельности</label>
+                        <div class="col-lg-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                                <select id="activity" class="form-control" v-model="currentTask.variables.activity.value">
+                                    <option value="sales">Продажа</option>
+                                    <option value="other">Другое</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="text-right">
-                    <button type="submit" class="btn btn-primary" id="processStart">Сохранить &nbsp;<i class="fa fa-arrow-right"></i></button>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Номер телефона</label>
+                        <div class="col-lg-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                <input type="text" v-model="currentTask.variables.phone.value" class="form-control" value="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Адрес организации</label>
+                        <div class="col-lg-9">
+                            <div class="input-group">
+                                <span class="input-group-addon" style="min-width: 39px"><i class="fa fa-map-marker"></i></span>
+                                <textarea rows="3" v-model="currentTask.variables.address.value" class="form-control" placeholder="Введите адрес"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary" @click.prevent="completeTask">Сохранить &nbsp;<i class="fa fa-arrow-right"></i></button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
