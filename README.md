@@ -28,3 +28,16 @@ Processing applications to open bank account for business entity.
   * Camunda BPM 7.5.0 bundle
   
 Camunda BPM localhost:8080/engine -> localhost:80/bpm
+
+## Installation and usage
+
+  * Download Camunda BPM tomcat bundle via https://camunda.org/download/
+  * Extract Camunda BPM tomcat bundle 
+  * Download task-executor.war and place into server/apache-tomcat-*/webapps folder inside Camunda BPM tomcat bundle
+  * Enable authentication in engine-rest as per documentation
+  * Execute start-camunda
+  * Install Apache 2.4
+  * Modify httpd.conf - add ``ProxyPass /bpm/ http://localhost:8080/engine-rest/``
+  * git clone newaccount inside Apache24/htdocs
+  * Launch http://localhost/newaccount/index.html
+
