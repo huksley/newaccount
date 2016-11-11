@@ -38,9 +38,19 @@ Camunda BPM localhost:8080/engine -> localhost:80/bpm
   * Execute start-camunda
   * Install Apache 2.4
   * Modify httpd.conf - add ``ProxyPass /bpm/ http://localhost:8080/engine-rest/``
-  * git clone newaccount inside Apache24/htdocs
+  * In folder Apache24/htdocs execute ``git clone https://github.com/huksley/newaccount/``
+  * Start Apache 2.4
   * Launch http://localhost/newaccount/index.html
   * Login into app using demo:demo
   * Upload process
   * Start new process using "Open new account"
+  
+## Useful links
+
+  * http://localhost/newaccount/index.html
+  * http://localhost:8080/camunda/app/cockpit/
+  * http://localhost:8080/camunda/app/tasklist/
+  * http://localhost:8080/camunda/app/admin/
+  * http://localhost:8080/manager/html
+  
 
