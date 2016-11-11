@@ -12,7 +12,7 @@ define("config", [ "jquery", "js-storage" ], function($, storage) {
         titleHtml: "<b>Новый</b> счет",
         company: "Huksley",
         companyUrl: "https://github.com/huksley",
-        bpmUrl: "http://localhost/bpm",
+        bpmUrl: "http://" + window.location.hostname + "/bpm",
         anonymous: "Not logged in",
 
         /**
