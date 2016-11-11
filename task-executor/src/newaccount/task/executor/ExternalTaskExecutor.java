@@ -8,17 +8,21 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class ExternalTaskExecutor implements Runnable {
@@ -126,9 +130,29 @@ public class ExternalTaskExecutor implements Runnable {
 					JsonObject t = (JsonObject) all.get(i);
 					String id = t.get("id").getAsString();
 					String topicName = t.get("topicName").getAsString();
-					log.info("Got task " + id + ", " + topicName);
+					String pid = t.get("processInstanceId").getAsString();
+					log.info("Got task " + id + ", " + topicName + ", " + pid);
+					r = call(Method.GET, "http://localhost/bpm/execution/" + pid + "/localVariables", null);
+					
+					String msg = "[" + topicName + "]";
+					String phone = "+79257005113";
+					JsonObject vars = gson.fromJson(r.response, JsonObject.class);
+					for (Iterator<Entry<String,JsonElement>> it = vars.entrySet().iterator(); it.hasNext();) {
+						Entry<String, JsonElement> e = it.next();
+						String name = e.getKey();
+						JsonObject o = (JsonObject) e.getValue();
+						if (o.has("value")) {
+							msg += ", " + name + "=" + o.get("value").getAsString();
+							if (name.equals("phone") && !o.get("value").getAsString().equals("")) {
+								phone = o.get("value").toString();
+							}
+						}
+					}
 					params.clear();
 					params.put("workerId", "test1");
+					String url = "http://192.168.1.2/sendsms.php?phone=" + phone + "&sendsms=1&text=" + URLEncoder.encode(msg, "UTF-8");
+					log.info("Calling " + url);
+					burp(Method.GET, url, null);
 					post = gson.toJson(params);
 					r = call(Method.POST, "http://localhost/bpm/external-task/" + id + "/complete", post);
 					log.info("Completed, response " + r.responseCode + " " + r.response);
