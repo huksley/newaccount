@@ -86,8 +86,12 @@
     <sequenceFlow id="SequenceFlow_06uro8y" sourceRef="ExclusiveGateway_1evliwf" targetRef="openAccount">
       <conditionExpression xsi:type="tFormalExpression">${approved}</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="SequenceFlow_1epkuyn" sourceRef="ExclusiveGateway_09migzb" targetRef="openAccount" />
-    <sequenceFlow id="SequenceFlow_0e9s0g3" sourceRef="ExclusiveGateway_1evliwf" targetRef="sendNotify1" />
+    <sequenceFlow id="SequenceFlow_1epkuyn" sourceRef="ExclusiveGateway_09migzb" targetRef="openAccount">
+      <conditionExpression xsi:type="tFormalExpression">${!needApprove}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_0e9s0g3" sourceRef="ExclusiveGateway_1evliwf" targetRef="sendNotify1">
+      <conditionExpression xsi:type="tFormalExpression">${!approved}</conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="SequenceFlow_1jwo6ju" sourceRef="sendNotify1" targetRef="endEvent2" />
     <sequenceFlow id="SequenceFlow_1x872bm" sourceRef="sendNotify2" targetRef="endEvent1" />
     <sendTask id="sendNotify1" name="Отказ в открытии" camunda:type="external" camunda:topic="sendSMS">
@@ -147,7 +151,9 @@
       <incoming>SequenceFlow_09qyy49</incoming>
       <outgoing>SequenceFlow_1x872bm</outgoing>
     </sendTask>
-    <sequenceFlow id="SequenceFlow_097uqqv" sourceRef="ExclusiveGateway_06fup6j" targetRef="createReport" />
+    <sequenceFlow id="SequenceFlow_097uqqv" sourceRef="ExclusiveGateway_06fup6j" targetRef="createReport">
+      <conditionExpression xsi:type="tFormalExpression">${!denied}</conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="SequenceFlow_09qyy49" sourceRef="createReport" targetRef="sendNotify2" />
     <serviceTask id="createReport" name="Подготовить отчет" camunda:type="external" camunda:topic="createReport">
       <incoming>SequenceFlow_097uqqv</incoming>
