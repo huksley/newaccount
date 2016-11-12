@@ -36,9 +36,13 @@ Camunda BPM localhost:8080/engine -> localhost:80/bpm
   * Download task-executor.war and place into server/apache-tomcat-*/webapps folder inside Camunda BPM tomcat bundle
   * Enable authentication in engine-rest as per [documentation](https://docs.camunda.org/manual/7.5/reference/rest/overview/authentication/)
   * Execute start-camunda
+  * Launch camunda admin
+  * Create groups approver, front
+  * Add user demo to groups approver, front
   * Install Apache 2.4
   * Modify httpd.conf - add ``ProxyPass /bpm/ http://localhost:8080/engine-rest/``
   * In folder Apache24/htdocs execute ``git clone https://github.com/huksley/newaccount/``
+  * Execute ``bower update`` in ``newaccount``
   * Start Apache 2.4
   * Launch http://localhost/newaccount/index.html
   * Login into app using demo:demo
