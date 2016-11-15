@@ -57,4 +57,12 @@ Camunda BPM localhost:8080/engine -> localhost:80/bpm
   * [admin - manage users](http://localhost:8080/camunda/app/admin/)
   * [tomcat manager - reload apps](http://localhost:8080/manager/html)
   
+## Deploy on Docker
+
+Preliminary version is prepared to deploy on Docker (using docker compose)
+Download ``docker-compose.yml`` and modify to your needs.
+For actually receiving messages when tasks must be executed you must create Telegram Bot and Telegram Channel.
+After it, execute in directory with this file.
+
+``docker compose``
 
