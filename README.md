@@ -62,7 +62,7 @@ Camunda BPM localhost:8080/engine -> localhost:80/bpm
 Preliminary version is prepared to deploy on Docker (using docker compose)
 Download ``docker-compose.yml`` and modify to your needs.
 For actually receiving messages when tasks must be executed you must create Telegram Bot and Telegram Channel.
-After it, execute in directory with this file.
+After it, execute in directory with this file:
 
 ``docker compose``
 
