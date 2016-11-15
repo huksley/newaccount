@@ -1,22 +1,22 @@
 version: '1'
-    services:
-      frontend:
-		image: huksley/newaccount
-		ports:
-			- "80"
-		links:
-			- bpm
-      task-executor:
-		environment:
-			- BPM_URL: http://bpm:8080/engine-rest
-			- TELEGRAM_TOKEN: 123
-			- TELEGRAM_CHANNEL: setme
-        image: huksley/newaccount-task-executor
-		ports: "8080"
-		links:
-			- bpm
-	  bpm:
-		image: camunda/camunda-bpm-platform:7.5.0
-		ports:
-			- "8080"
+services:
+  frontend:
+    image: huksley/newaccount
+    ports:
+        - "80"
+    links:
+        - bpm
+  task-executor:
+    environment:
+        - BPM_URL: http://bpm:8080/engine-rest
+        - TELEGRAM_TOKEN: 123
+        - TELEGRAM_CHANNEL: setme
+    image: huksley/newaccount-task-executor
+    ports: "8080"
+    links:
+        - bpm
+  bpm:
+    image: camunda/camunda-bpm-platform:7.5.0
+    ports:
+        - "8080"
 
