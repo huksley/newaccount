@@ -99,7 +99,7 @@ public class ExternalTaskExecutor implements Runnable {
 		}
 	}
 	
-	static String bpmUrl = "http://localhost:8080/engine-rest/";
+	static String bpmUrl = "http://localhost:8080/engine-rest";
 	static String telegramToken = null;
 	static String telegramChannel = null;
 
