@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -34,15 +35,15 @@ public class ExternalTaskExecutor implements Runnable {
 		DELETE
 	}
 	
-	class Response {
+	static class Response {
 		int responseCode;
 		String response;
 	}
 	
-	public Response call(Method method, String url, String post) throws IOException {
+	public static Response call(Method method, String url, String post) throws IOException {
 		HttpURLConnection u = (HttpURLConnection) new URL(url).openConnection();
 		try {
-			u.setRequestMethod(method.name());
+			u.setRequestMethod(method != null ? method.name() : Method.GET.name());
 			u.setRequestProperty("Accept", "application/json");
 			u.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString("demo:demo".getBytes()));
 			u.setDoInput(true);
@@ -88,17 +89,37 @@ public class ExternalTaskExecutor implements Runnable {
 	}
 
 	// do and ignore
-	public Response burp(Method method, String url, String body) {
+	public static Response burp(Method method, String url, String body) {
 		try {
-			return call(method, url, body);
+			Response r = call(method, url, body);
+			return r;
 		} catch (Exception e) {
 			// Don`t care
 			return null;
 		}
 	}
+	
+	static String bpmUrl = "http://localhost:8080/engine-rest/";
+	static String telegramToken = null;
+	static String telegramChannel = null;
 
 	@Override
 	public void run() {
+		String s = System.getenv("BPM_URL");
+		if (s != null) {
+			bpmUrl = s.trim();
+		}
+		
+		s = System.getenv("TELEGRAM_TOKEN");
+		if (s != null) {
+			telegramToken = s.trim();
+		}
+		
+		s = System.getenv("TELEGRAM_CHANNEL");
+		if (s != null) {
+			telegramChannel = s.trim();
+		}
+		
 		// log.info("Checking for available tasks...");
 		try {
 			Gson gson = new GsonBuilder().create();
@@ -121,7 +142,7 @@ public class ExternalTaskExecutor implements Runnable {
 			params.put("topics", topics);
 			String post = gson.toJson(params);
 			// log.info("Sending " + post);
-			Response r = call(Method.POST, "http://localhost/bpm/external-task/fetchAndLock", post);
+			Response r = call(Method.POST, bpmUrl + "/external-task/fetchAndLock", post);
 			// log.info("Got " + r.responseCode + " " + r.response);
 			JsonArray all = gson.fromJson(r.response, JsonArray.class);
 			if (all.size() > 0) {
@@ -132,7 +153,7 @@ public class ExternalTaskExecutor implements Runnable {
 					String topicName = t.get("topicName").getAsString();
 					String pid = t.get("processInstanceId").getAsString();
 					log.info("Got task " + id + ", " + topicName + ", " + pid);
-					r = call(Method.GET, "http://localhost/bpm/execution/" + pid + "/localVariables", null);
+					r = call(Method.GET, bpmUrl + "/execution/" + pid + "/localVariables", null);
 					
 					String msg = "[" + topicName + "]";
 					String phone = "+79257005113";
@@ -150,16 +171,26 @@ public class ExternalTaskExecutor implements Runnable {
 					}
 					params.clear();
 					params.put("workerId", "test1");
-					String url = "http://192.168.1.2/sendsms.php?phone=" + URLEncoder.encode(phone, "UTF-8") + "&sendsms=1&text=" + URLEncoder.encode(msg, "UTF-8");
-					log.info("Calling " + url);
-					burp(Method.GET, url, null);
+					sendMessage(msg, phone);
 					post = gson.toJson(params);
-					r = call(Method.POST, "http://localhost/bpm/external-task/" + id + "/complete", post);
+					r = call(Method.POST, bpmUrl + "/external-task/" + id + "/complete", post);
 					log.info("Completed, response " + r.responseCode + " " + r.response);
 				}
 			}
 		} catch (Exception e) {
 			log.log(Level.WARNING, "Failed to check: " + e.getMessage(), e);
+		}
+	}
+
+	private void sendMessage(String msg, String phone) throws UnsupportedEncodingException {
+		if (telegramChannel != null && telegramToken != null) {
+			String chan = telegramChannel;
+			if (!chan.startsWith("@")) {
+				chan = "@" + chan;
+			}
+			String url = "https://api.telegram.org/bot" + telegramToken + "/sendMessage?chat_id=" + chan + "&text=" + URLEncoder.encode(msg, "UTF-8");
+			log.info("Calling " + url);
+			burp(Method.GET, url, null);
 		}
 	}
 }
