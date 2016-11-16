@@ -1,4 +1,4 @@
-version: '1'
+version: '2'
 services:
   frontend:
     image: huksley/newaccount
@@ -8,11 +8,12 @@ services:
         - bpm
   task-executor:
     environment:
-        - BPM_URL: http://bpm:8080/engine-rest
-        - TELEGRAM_TOKEN: 123
-        - TELEGRAM_CHANNEL: setme
+        - BPM_URL=http://bpm:8080/engine-rest
+        - TELEGRAM_TOKEN=123
+        - TELEGRAM_CHANNEL=setme
     image: huksley/newaccount-task-executor
-    ports: "8080"
+    ports:
+        - "8080"
     links:
         - bpm
   bpm:
