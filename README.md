@@ -64,5 +64,6 @@ Download ``docker-compose.yml`` and modify to your needs.
 For actually receiving messages when tasks must be executed you must create Telegram Bot and Telegram Channel.
 After it, execute in directory with this file:
 
-``docker compose``
+``docker-compose up -d``
 
+After it, exec ``docker ps`` and find dynamically generated port for newaccount-frontend.
