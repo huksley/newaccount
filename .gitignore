@@ -1,2 +1,5 @@
 lib
 doc
+*.log
+.vagrant
+*.zip
