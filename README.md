@@ -24,10 +24,19 @@ Processing applications to open bank account for business entity.
 
   * SPA HTML5 webapp
   * Apache Http 2.4
-  * Java task executor application
+  * Java service task executor application working via [External Task execution](https://docs.camunda.org/manual/7.4/user-guide/process-engine/external-tasks/)
   * Camunda BPM 7.5.0 bundle
   
 Camunda BPM localhost:8080/engine -> localhost:80/bpm
+
+## Installation using vagrant
+
+You must have Vagrant & Oracle VirtualBox installed.
+
+  * Clone project
+  * Go to vagrant folder
+  * Execute vagrant up
+  * Go to http://localhost:8060/
 
 ## Installation and usage
 
